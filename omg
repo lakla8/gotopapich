@@ -1,0 +1,393 @@
+import random as r
+
+
+
+def handler(event, context):
+
+
+# ------------------------------------------------------------------------------------------------------------------
+# ИГНОР (1, ignor.py)
+
+
+    num = r.randint(1, 200)
+    #tts = ''
+    #text = ''
+    if num <= 2:
+        text = '(это игнор)' #!!! удалить текст
+        if 'request' in event and \
+                'original_utterance' in event['request'] \
+                and len(event['request']['original_utterance']) > 0:
+            text = ''
+            tts = ''
+
+    # КОНЕЦ ИГНОР
+    # ----------------------------------------------------------------------------------------------------------
+    # СИГНАЛКА (2, signalka.py)
+
+    elif num > 0 and num <= 100:
+        text = ''
+        tts = ''
+        if 'request' in event and \
+                'original_utterance' in event['request'] \
+                and len(event['request']['original_utterance']) > 0:
+            try:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9f2ac2a5-ca2d-4f19-a5d5-c0fb1cac706f.opus">'
+                text = 'ПОЖАР!!!'
+            except Exception as err:
+                text = str(err)
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                        # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made.
+                        'text': text,
+                        'tts': tts,
+                        # Don't finish the session after this response.
+                        'end_session': 'true'
+                    }
+                }
+            # КОНЕЦ СИГНАЛКА
+    # -------------------------------------------------------------------------------------------------------------------
+    # ШИФР (3, index.py)
+
+    elif num > 25 and num <= 30:
+        text = ''
+        tts = ''
+
+        if 'request' in event and \
+                'original_utterance' in event['request'] \
+                and len(event['request']['original_utterance']) > 0:
+            try:
+                tts = (event['request']['original_utterance'])[::-1]
+                text = 'хахаха'
+            except Exception as err:
+                text = str(err)
+
+            # КОНЕЦ ШИФР
+    # ------------------------------------------------------------------------------------------------------------------
+    # ВЫХОД (4, leave.py)
+
+    elif num > 30 and num <= 31:
+        try:
+            text = ''
+            tts = ''
+            if 'request' in event and \
+                    'original_utterance' in event['request'] \
+                    and len(event['request']['original_utterance']) > 0:
+                text = ''
+                tts = ''
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                        # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made.
+                        'text': text,
+                        # Don't finish the session after this response.
+                        'end_session': 'true'
+                    }
+                }
+        except Exception as err:
+            text = str(err)
+
+###################################################################################
+#                            прога
+############################################################################
+    else:
+        hello = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/c952352c-284e-492f-9958-85376edb3c68.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/f7ef4521-d913-4308-a84c-41942555cb4e.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/70e4e5e2-0214-4185-a3f9-310dc24844bb.opus">']
+        end = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/acf952d4-f7dc-43bd-8f72-bb64159a7f6d.opus">','<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/cdb8f895-bb71-476d-9466-a9c8c150789f.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/2c86460a-dcbf-47f9-9b2b-82fc55d6def5.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/d7909ac7-d175-4a16-b82e-ccfc5ccca6fd.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/5080e367-05c4-47da-b206-bc2e1dbe51c2.opus">']
+        text = '.'
+        tts = ''
+        pos = 0
+        haha = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/0904aa7b-f1ba-4997-a557-800110cf62fa.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/fd4f4954-60b3-4222-9718-1d149c54a608.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/3a2ba707-0b32-46e3-9c68-6993ec9f21c6.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/26650755-8951-430f-979b-875d03855aa1.opus">']
+
+
+        if event['session']['new'] is True:
+            tts = r.choice(hello)
+        if 'request' in event and \
+            'original_utterance' in event['request'] \
+            and len(event['request']['original_utterance']) > 0:
+
+            if 'pos' in event['state']['session'] and event['state']['session']['pos'] == 12:
+                text = 'салам я валентайн, я подготовил для тебя треньку, начнем с разминки: \n1.делаем повороты головой влево вправо'
+                tts = 'салам я валент+айн, я подготовил для тебя треньку, начинем с разминки: первое, делаем повроты головой влево вправо 10 секунд'
+                pos = 13
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                        'tts': tts,
+                        'text': text,
+                        'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                    },
+                            # Don't finish the session after this response.
+                    'session_state': {
+                            'pos': pos,
+                            'fight': False
+                    }
+                }
+
+            elif event['state']['session']['fight'] is True:
+                d = event['state']['session']['fight_parameters']['d']
+                end = 100
+                h = event['state']['session']['fight_parameters']['h']
+                enh = event['state']['session']['fight_parameters']['enh']
+                action = event['request']['original_utterance']
+                phrases = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/1d739f5e-5323-4248-b50c-13f5a4f970f8.opus">','<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/3ec6f484-4760-4dd0-8a14-0f28b312eb7d.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/8b0ad4d3-b1db-4633-837c-a6000c4f53ab.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/7697a5e7-a963-4464-a0df-34ed536a9cac.opus">','<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9832d9b0-52c8-4817-8c18-98b83216116a.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/5bef3385-65b8-4cc8-a732-9dbb38e76d31.opus">']
+                pos = 0
+                fight = True
+                draw = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/47a5feb8-7bd9-4dc1-b0fe-5ebbe594e5c7.opus">']
+                win = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/ca17c762-1680-4951-934c-fcc9cf12ca33.opus">','<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/a0b2b98c-86ff-4b42-b170-1669bccc8228.opus">','<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/f29fe585-ada0-4e19-98f8-614bfa2372b4.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/f1447e98-6200-4cca-96e7-8ec791a96edc.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/aac4502f-aae4-46a7-8730-5b16a67c7eed.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/a7dba46a-04fe-40a4-89e4-d518fce454a7.opus">']
+                lose = ['<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/75189ce2-ce42-4412-9e4d-17a3091e658c.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/72855545-b3ce-4c75-ac3a-1b3b6e2c7a6f.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/134bcb0a-c293-47a9-91a6-6d787d726984.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/84f2a6b5-82fe-410d-9c91-ff454bb266a3.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/e772da3f-b93b-4cfc-a6d8-d8853a0ad5c0.opus">', '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/32be82c8-6463-4038-b74f-d2d6695e3b69.opus">']
+
+                if 'атака' == action:
+                    end *= 1 + r.randint(1, 50)/100
+                    h -= end
+                    d *= 1 + r.randint(-25, 40)/100
+                    enh -= d               
+
+                elif 'защита' == action:
+                    defn = r.randint(1, 50)/100
+                    end *= 1 + r.randint(1, 50)/100
+                    h -= end*(1-defn)
+                    enh -= d
+                    
+                elif 'загадка' == action:
+                    n = 1
+                    if r.randint(1, 100) == 42:
+                        n = 100000000000
+                    end *= 1 + r.randint(1, 50)/100
+                    h -= end
+                    enh -= d*n
+                elif 'сбежать' == action:
+                    if r.randint(1, 100) == 69:
+                        pass
+                    else:
+                        end *= 1 + r.randint(1, 50)/100
+                        h -= end
+                        enh -= d       
+                tts = r.choice(phrases)
+                text = 'Игрок наносит удар: {dm}. ХП противника: {hp} \n папич наносит удар: {edm}. ХП игрока: {ehp}'.format(dm = d, hp = enh, edm = end, ehp = h) 
+                if h < 0:
+                    tts = r.choice(win)
+                    text = 'ты проиграл'
+                    fight = False
+                    return {
+                        'version': event['version'],
+                        'session': event['session'],
+                        'response': {
+                            'tts': tts,
+                            'text': text,
+                            'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                        },
+                            # Don't finish the session after this response.
+                        'session_state': {
+                            'pos': pos,
+                            'fight': fight,
+                            }
+                        }
+                    
+                elif enh < 0:
+                    tts = r.choice(lose)
+                    text = 'ты выиграл'
+                    fight = False
+                    return {
+                        'version': event['version'],
+                        'session': event['session'],
+                        'response': {
+                            'tts': tts,
+                            'text': text,
+                            'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                        },
+                            # Don't finish the session after this response.
+                        'session_state': {
+                            'pos': pos,
+                            'fight': fight,
+                            }
+                        }
+                    
+                elif enh < 0 and h < 0:
+                    tts = r.choice(draw)
+                    text = 'ничья'
+                    fight = False
+                    return {
+                        'version': event['version'],
+                        'session': event['session'],
+                        'response': {
+                            'tts': tts,
+                            'text': text,
+                            'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                        },
+                            # Don't finish the session after this response.
+                        'session_state': {
+                            'pos': pos,
+                            'fight': fight,
+                            }
+                        }
+                    
+
+
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                        'tts': tts,
+                        'text': text,
+                        'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                    },
+                            # Don't finish the session after this response.
+                    'session_state': {
+                            'pos': pos,
+                            'fight': fight,
+                            'fight_parameters': {
+                                'h': h,
+                                'enh': enh,
+                                'd': d,
+                                'action': action,
+                                'end': end                                
+                            }
+                    }
+                }
+                
+
+            elif 'pos' in event['state']['session'] and event['state']['session']['pos'] == 69:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/b8d40fde-68ef-49fc-8b56-435404d77e9a.opus">'
+                text = 'выбери, что будешь делать: атака, защита, загадка, сбежать'
+                fight = True
+                h = 100
+                enh = 200
+                d = 10
+                end = 5
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                        'tts': tts,
+                        'text': text,
+                        'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                    },
+                            # Don't finish the session after this response.
+                    'session_state': {
+                            'pos': pos,
+                            'fight': fight,
+                            'fight_parameters': {
+                                'h': h,
+                                'enh': enh,
+                                'd': d,
+                                'end': end
+                            }
+                    }
+                }
+
+
+            elif 'fight_id' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/0ec86c21-02dc-4359-a35b-1aee2fc24438.opus">'
+                pos = 69
+
+
+            elif 'pos' in event['state']['session'] and event['state']['session']['pos'] == 1:
+                tts = r.choice(haha)
+
+            elif 'shower_id' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9ad794d4-2be9-4f4f-8a6e-54679a563578.opus">'
+
+
+            elif 'hello_id' in event['request']['nlu']['intents']:
+                tts = r.choice(hello)
+
+            elif 'pap_id' in event['request']['nlu']['intents']:       
+                tts = 'а?'
+
+            elif 'black_humor' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">'
+            
+            elif 'black' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/86779b11-e124-4129-b085-5320d9da8fb5.opus">'
+            
+            elif 'meow_c' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/dad889d5-651b-4c11-bf97-56a409d9d9b8.opus">'
+            
+            elif 'lang_new' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/b84687c4-2e70-4877-8eff-815e45afbd3c.opus">'
+            
+            elif 'music_n' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/2c86460a-dcbf-47f9-9b2b-82fc55d6def5.opus">'
+            elif 'solo_id' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/cb9f971b-b72f-447e-ba22-e02941c93cb8.opus">'
+
+            elif 'end_this' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/2e8d4247-6a31-4ccf-8bec-55c4a0b33ce7.opus">'
+
+            elif 'humor' in event['request']['nlu']['intents']:
+                tts = '<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/f1aa49c9-c36e-4a46-bb94-d0f5858f51b8.opus">'
+                pos = 1
+            elif 'training_id' in event['request']['nlu']['intents']:
+                tts = 'хочешь запустить тренировку от Валентайна?'
+                text = 'хочешь запустить тренировку от Валентайна?'
+                pos = 12
+            
+            elif 'task_id' in event['request']['nlu']['intents']:
+                tts = ''
+                text = '.'
+                zadachi = ['В корзине лежало 4 гриба, один гриб оказался несъедобным и его выбросили. Сколько грибов осталось?',
+                   'Три девочки взяли по 1 шарику в каждую руку. Сколько всего у них шариков?',
+                   'На дереве сидели 2 птички, к ним прилетела еще одна птичка. Сколько птиц стало на дереве?',
+                   'Около дома росли 4 дерева, 2 дерева спилили. Сколько осталось деревьев?',
+                   'Мама купила 3 апельсина и 4 банана. Сколько всего фруктов купила мама?',
+                   'У кошки было 5 котят, трех котят отдали. Сколько осталось котят?',
+                   'На столе лежали 3 огурца, 5 абрикосов и 2 помидора. Сколько фруктов лежало на столе?',
+                   'В магазине было 12 мячиков, 6 мячиков купили. Сколько мячиков осталось?',
+                   'В магазине на витрине стояло 15 ваз, 6 ваз купили и одну разбили. Сколько осталось ваз?',
+                   'Сколько семечек в пустом стакане?', 'Какая птица выводится из яйца, а сама яиц не несет? ',
+                   'В тарелке лежало 6 яблок. Одно из них разрезали пополам и положили в тарелку. Сколько яблок в тарелке?',
+                   'Одно яйцо варят 5 минут. Сколько минут надо варить 5 яиц?']
+                text = r.choice(zadachi)
+                tts = ''
+                try:
+                    if event['request']['original_utterance'].lower() == 'задача':
+                        text = r.choice(zadachi)
+                        tts = ''
+                    else:
+                        text = 'неверно, лошара'
+                        tts = 'х+ахахахахахахаха'
+                except Exception as err:
+                    text = str(err)
+
+                return {
+                    'version': event['version'],
+                    'session': event['session'],
+                    'response': {
+                # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made.
+                        'text': text,
+                        'tts': tts,
+                # Don't finish the session after this response.
+                        'end_session': 'false'
+                        }
+                    }
+
+            else:
+                tts = r.choice(end)
+
+        
+
+        return {
+            'version': event['version'],
+            'session': event['session'],
+            'response': {
+                'tts': tts,
+                'text': text,
+                'end_session': 'false'
+                            # Respond with the original request or welcome the user if this is the beginning of the dialog and the request has not yet been made., #<speaker audio="dialogs-upload/29a02b74-0eb3-43b5-b223-530f1bbfa6ed/9b7cca6b-422e-424b-9b16-655798eafd19.opus">
+                },
+                            # Don't finish the session after this response.
+            'session_state': {
+                'pos': pos,
+                'fight': False
+            }
+        }
+        
